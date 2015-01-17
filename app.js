@@ -25,12 +25,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 
-app.use('/spotify/search', spotify);
+app.use('/search', spotify);
 
-app.use('/autio/create-session', session);
-app.use('/autio/join-session', session);
-
-app.use('/autio/enqueue', session);
+app.use('/session', session);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
