@@ -2,19 +2,26 @@ var express = require('express');
 var mongoose = require('mongoose');
 var router = express.Router();
 
-var Session = mongoose.model('Session',{
-  name: String,
-  members: [mongoose.model('Guest', {
-    name: String
-  })],
-  queue: [mongoose.model('Song', {
-    spotify_id: String,
-    owner_id: String,
-    song_name: String,
-    song_artist: String,
-    song_artwork: String
-  })]
+var MemberSchema = mongoose.Schema({
+  name: String
 });
+var Member = mongoose.model('Member', MemberSchema);
+
+var SongSchema = mongoose.Schema({
+  spotify_id: String,
+  owner_id: String,
+  song_name: String,
+  song_artist: String,
+  song_artwork: String
+});
+var Song = mongoose.model('Song', SongSchema);
+
+var SessionSchema = mongoose.Schema({
+  name: String,
+  members: [MemberSchema],
+  queue: [SongSchema]
+});
+var Session = mongoose.model('Session', SessionSchema);
 
 router.get('/', function(req, res) {
 
@@ -43,27 +50,33 @@ router.get('/', function(req, res) {
 
   } else if(req.query['action'] == "join") {
 
-    var member = new Member({
-      name: req.query['first_name']
-    })
 
-    Session.findByIdAndUpdate(req.query['session_id'], {
-      $push: { members: member }
-    }, function (err, session) {
+    Session.findById(req.query['session_id'], function (err, session) {
+
       if (err) {
         res.json({
           status: "error",
           info: err
-        });
-      } else {
-        res.json({
-          status: "success",
-          "session": session
-        });
+        })
       }
-      res.send(tank);
-    });
 
+      session.members.push({ name: req.query['first_name'] });
+
+      session.save(function (err) {
+        if (err) {
+          res.json({
+            status: "error",
+            info: err
+          })
+        } else {
+          res.json({
+            status: "success",
+            "session": session
+          });
+        }
+      });
+
+    });
 
   } else if (req.query['action'] == "enqueue") {
 
