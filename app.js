@@ -5,9 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var mongoose = require('mongoose');
+
 var routes = require('./routes/index');
 var spotify = require('./routes/spotify');
 var session = require('./routes/session');
+var secrets = require('./secrets');
 
 var app = express();
 
@@ -22,6 +25,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+mongoose.connect('mongodb://autio:' + secrets.mongoPass + '@ds060977.mongolab.com:60977/autio');
 
 app.use('/', routes);
 
