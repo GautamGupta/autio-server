@@ -30,9 +30,9 @@ mongoose.connect('mongodb://autio:' + secrets.mongoPass + '@ds060977.mongolab.co
 
 app.use('/', routes);
 
-app.use('/search', spotify);
+app.use('/api/v1/search', spotify);
 
-app.use('/session', session);
+app.use('/api/v1/session', session);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
