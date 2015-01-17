@@ -4,7 +4,7 @@ var router = express.Router();
 
 var Session = mongoose.model('Session',{
   name: String,
-  members, [mongoose.model('Guest', {
+  members: [mongoose.model('Guest', {
     name: String
   })],
   queue: [mongoose.model('Song', {
@@ -21,10 +21,49 @@ router.get('/', function(req, res) {
   if(req.query['action'] == "create") {
 
     //Push to mongo the session
+    var session = new Session({
+      name: req.query['first_name'],
+      members: [],
+      queue: []
+    });
+
+    session.save(function(error, data){
+      if(error){
+        res.json({
+          status: "error",
+          info: data
+        });
+      } else {
+        res.json({
+          status: "success",
+          session_id: data._id
+        });
+      }
+    });
 
   } else if(req.query['action'] == "join") {
 
-    res.json({"thing":"join session"});
+    var member = new Member({
+      name: req.query['first_name']
+    })
+
+    Session.findByIdAndUpdate(req.query['session_id'], {
+      $push: { members: member }
+    }, function (err, session) {
+      if (err) {
+        res.json({
+          status: "error",
+          info: err
+        });
+      } else {
+        res.json({
+          status: "success",
+          "session": session
+        });
+      }
+      res.send(tank);
+    });
+
 
   } else if (req.query['action'] == "enqueue") {
 
