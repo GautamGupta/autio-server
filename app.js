@@ -32,7 +32,7 @@ app.use('/', routes);
 
 app.use('/api/v1/search', spotify);
 
-app.use('/api/v1/session', session);
+app.use('/api/v1', session);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
