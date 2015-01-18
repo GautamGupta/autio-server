@@ -10,9 +10,11 @@ router.get('/', function(req, res) {
     if (!error && response.statusCode == 200) {
       var data = JSON.parse(body)
       var tracks = data.tracks.items
-      var response = []
+      var response = {
+        'results': []
+      }
       for(var i = 0; i < tracks.length; i++) {
-        response.push({
+        response.results.push({
           "id": tracks[i].id,
           "name": tracks[i].name,
           "artist": tracks[i].artists[0].name,

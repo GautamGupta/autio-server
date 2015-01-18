@@ -37,7 +37,7 @@ router.get('/', function(req, res) {
     session.save(function(error, data){
       if(error){
         res.json({
-          status: "error",
+          status: "failure",
           info: data
         });
       } else {
@@ -55,7 +55,7 @@ router.get('/', function(req, res) {
 
       if (err) {
         res.json({
-          status: "error",
+          status: "failure",
           info: err
         })
       }
@@ -65,7 +65,7 @@ router.get('/', function(req, res) {
       session.save(function (err) {
         if (err) {
           res.json({
-            status: "error",
+            status: "failure",
             info: err
           })
         } else {
