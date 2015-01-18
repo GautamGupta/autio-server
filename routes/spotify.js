@@ -18,7 +18,7 @@ router.get('/', function(req, res) {
           "id": tracks[i].id,
           "name": tracks[i].name,
           "artist": tracks[i].artists[0].name,
-          "artwork": tracks[i].album.images[0]
+          "artwork": tracks[i].album.images[tracks[i].album.images.length - 1]
         })
       }
       res.json(response)
